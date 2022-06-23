@@ -1,0 +1,6 @@
+
+*.MOV
+save/variables/variables.data-00000-of-00001
+checkpoints/yolov4-416/saved_model.pb
+checkpoints/yolov4-416/variables/variables.data-00000-of-00001
+data/video/Output/Stabilized.avi
