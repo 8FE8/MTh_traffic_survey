@@ -1,0 +1,6 @@
+name: MTh2022
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+prefix: C:\Users\fescr\anaconda3\envs\MTh2022
