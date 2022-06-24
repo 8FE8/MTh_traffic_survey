@@ -1,3 +1,19 @@
 
 01_deeplab_inference-main/deeplab_inference/input/DJI_0008_original.MP4
 *.pb
+02_original_code/optical_flow/02_raw_data/DJI_0008.mp4
+02_original_code/optical_flow/02_raw_data/DJI_0008_orig.MP4
+02_original_code/optical_flow/02_raw_data/DJI_0008_original.MP4
+02_original_code/optical_flow/04_Python_code/01_first_version/exclude/DJI_0008.mp4
+02_original_code/optical_flow/04_Python_code/02_alternative_version(Final)/exclude/georef_long.mp4
+02_original_code/optical_flow/04_Python_code/02_alternative_version(Final)/exclude/DJI_0008_original.MP4
+02_original_code/optical_flow/04_Python_code/02_alternative_version(Final)/exclude/DJI_0008.mp4
+02_original_code/optical_flow/02_raw_data/Incrocio_basel.MP4
+02_original_code/optical_flow/02_raw_data/Incrocio_pedoni.MP4
+02_original_code/optical_flow/02_raw_data/georef_long.mp4
+02_original_code/optical_flow/05_screenshots/Nov-01-2021 11-48-10.mp4
+02_original_code/optical_flow/05_screenshots/Nov-01-2021 11-48-48.mp4
+02_original_code/optical_flow/05_screenshots/Nov-01-2021 11-49-03.mp4
+02_original_code/optical_flow/05_screenshots/Nov-01-2021 12-04-47.mp4
+02_original_code/optical_flow/05_screenshots/Nov-01-2021 12-04-52.mp4
+02_original_code/optical_flow/05_screenshots/Nov-01-2021 12-04-56.mp4
