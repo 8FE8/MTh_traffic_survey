@@ -1,3 +1,12 @@
 
 01_deeplab_inference-main/deeplab_inference/input/DJI_0008_original.MP4
 *.pb
+
+00_DeepSort/checkpoints/
+
+.idea/misc.xml
+cmake-build-debug/
+.idea/
+.vscode/
+python/__pycache__/
+*.pyc
