@@ -17,3 +17,12 @@
 02_original_code/optical_flow/05_screenshots/Nov-01-2021 12-04-47.mp4
 02_original_code/optical_flow/05_screenshots/Nov-01-2021 12-04-52.mp4
 02_original_code/optical_flow/05_screenshots/Nov-01-2021 12-04-56.mp4
+
+00_DeepSort/checkpoints/
+
+.idea/misc.xml
+cmake-build-debug/
+.idea/
+.vscode/
+python/__pycache__/
+*.pyc
