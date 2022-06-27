@@ -11,10 +11,11 @@ from deep_sort import preprocessing
 object_detector = FasterRCNNWrapper()
 
 
-video_path = str('../../Nadir-90m-6-001.MOV') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
 
+video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
+video_name = "Nadir-90m-6-001.MOV"
 
-video = cv2.VideoCapture(video_path)
+video = cv2.VideoCapture(video_path + video_name)
 
 # get dimension of video input
 width_input  = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))   # width`
@@ -22,17 +23,19 @@ height_input = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 
 
-bbox_output = str('./data/video/Output/Object-detector-bbox_output.txt') # Path to BBox-Output
+bbox_output = str('./data/video/Output/Object-detector-' + video_name[:-4] + ".txt") # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
 
-windowSize, stepSize = 1000, 800
+windowSize, stepSize = 1500, 1200
 frame_num = 0
 while True:
     # Capture frame-by-frame
     return_value, frame = video.read()
+    if not return_value:
+        break
     main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 
@@ -53,7 +56,7 @@ while True:
             patch = frame[y1:y2, x1:x2]
 
             h,w,_ = patch.shape
-            if h < 300 or w < 300:
+            if h < 500 or w < 500:
                 continue
 
             bboxes_patch, classes_patch = object_detector.detect(patch, x1, y1)
@@ -84,8 +87,10 @@ while True:
     classes = [classes[i] for i in indices]  
 
     color = (255,0,0)
-    for x,y,w,h in bboxes:
+    for i, (x,y,w,h) in enumerate(bboxes):
         cv2.rectangle(main_frame, (x, y), (x+w, y+h), color, 2)
+        bbbox_output_file.write("Frame: "+ str(frame_num)+", Class: {}, (xmin, ymin, xmax, ymax): {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
+
 
     
     # calculate frames per second of running detections

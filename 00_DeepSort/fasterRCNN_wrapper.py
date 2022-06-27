@@ -28,8 +28,8 @@ class FasterRCNNWrapper():
 
         bboxes, classes = [], []
         for label, score, top_left, bottom_right in predictions:
-            if "pedestrian" == label:
-                continue
+            # if "pedestrian" == label:
+            #     continue
             x1, y1 = top_left[0] + x_offset, top_left[1] + y_offset
             width, height = bottom_right[0] - top_left[0], bottom_right[1] - top_left[1]
             bboxes.append([x1, y1, width, height])
