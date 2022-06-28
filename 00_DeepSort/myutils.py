@@ -79,3 +79,29 @@ def runYoloV4(frame, infer, cfg, thresh_iou, thresh_score, x_offset, y_offset, y
 
     #print("BBoxes : " + str(bboxes))
     return boxesFinal, scores.tolist()
+
+
+def read_detection(detection_file):
+
+    bboxes = {}
+    labels = {}
+    with open(detection_file) as f:
+        lines = f.readlines()
+        for line in lines:
+            idx = line.find(",")
+            frame_id = int(line[7:idx])
+            idx = line.find("Class:")+7
+            label = line[idx:idx+3]
+            idx = line.find(" ymax):")+7
+            x1,y1,x2,y2 = line[idx:].split(',')
+            x1,y1,x2,y2 = int(x1), int(y1), int(x2), int(y2)
+            if frame_id in bboxes:
+                bboxes[frame_id].append([x1,y1,x2-x1,y2-y1])
+                labels[frame_id].append(label)
+            else:
+                bboxes[frame_id] = [[x1,y1,x2-x1,y2-y1]]
+                labels[frame_id] = [label]
+            
+            # print(frame_id, " ", x1,y1,x2,y2)
+            # break
+    return bboxes, labels

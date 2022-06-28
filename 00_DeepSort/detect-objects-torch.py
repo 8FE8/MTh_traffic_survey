@@ -89,7 +89,7 @@ while True:
     color = (255,0,0)
     for i, (x,y,w,h) in enumerate(bboxes):
         cv2.rectangle(main_frame, (x, y), (x+w, y+h), color, 2)
-        bbbox_output_file.write("Frame: "+ str(frame_num)+", Class: {}, (xmin, ymin, xmax, ymax): {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
+        bbbox_output_file.write("Frame: "+ str(frame_num)+", Class: {}, Coor: {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
 
 
     
