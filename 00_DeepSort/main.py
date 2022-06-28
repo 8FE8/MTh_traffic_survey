@@ -56,9 +56,9 @@ pts = [deque(maxlen=3000) for _ in range(50000)]
 
 video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
 video_name = "Nadir-90m-6-001.MOV"
+video_name = "PETS09-S2L1-raw.webm"
 
-
-detection_txt_file = './data/video/Output/Object-detector-' + video_name[:-4] + "-fasterRCNN.txt"
+detection_txt_file = './data/video/Output/Object-detector-' + video_name[:-4] + ".txt"
 bboxes_dict, labels_dict = myutils.read_detection(detection_txt_file)
 
 # Set Parameters for Tracking

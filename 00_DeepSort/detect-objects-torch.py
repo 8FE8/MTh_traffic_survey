@@ -8,19 +8,21 @@ from fasterRCNN_wrapper import FasterRCNNWrapper
 from deep_sort import preprocessing
 
 
-object_detector = FasterRCNNWrapper()
-
+applySlidingWindow = True
 
 
 video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
 video_name = "Nadir-90m-6-001.MOV"
+# video_name = "PETS09-S2L1-raw.webm"
+
 
 video = cv2.VideoCapture(video_path + video_name)
+object_detector = FasterRCNNWrapper()
+
 
 # get dimension of video input
 width_input  = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))   # width`
 height_input = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)) 
-
 
 
 bbox_output = str('./data/video/Output/Object-detector-' + video_name[:-4] + ".txt") # Path to BBox-Output
@@ -50,6 +52,11 @@ while True:
     for y1 in range(0, main_frame.shape[0], stepSize):
         for x1 in range(0, main_frame.shape[1], stepSize):
                             
+            if False == applySlidingWindow:    
+                bboxes, classes = object_detector.detect(patch, 0, 0)
+                break
+
+            
             y2 = y1 + windowSize
             x2 = x1 + windowSize
 

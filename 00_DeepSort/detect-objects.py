@@ -17,7 +17,13 @@ import numpy as np
 from deep_sort import preprocessing
 import myutils
 
-video_path = str('../../Nadir-90m-6-001.MOV') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
+
+applySlidingWindow = True
+
+
+video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
+video_name = "Nadir-90m-6-001.MOV"
+# video_name = "PETS09-S2L1-raw.webm"
 
 thresh_iou = float(0.45) # IOU-Threshold, e.g. 0.45
 thresh_score = float(0.50) # Score-Threshold, e.g. 0.50
@@ -25,7 +31,7 @@ thresh_score = float(0.50) # Score-Threshold, e.g. 0.50
 weights_yolo = './checkpoints/yolov4-416'
 yolo_width, yolo_height = 416, 416
 
-video = cv2.VideoCapture(video_path)
+video = cv2.VideoCapture(video_path + video_name)
 
 # get dimension of video input
 width_input  = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))   # width`
@@ -38,7 +44,7 @@ saved_model_loaded = tf.saved_model.load(weights_yolo, tags=[tag_constants.SERVI
 infer = saved_model_loaded.signatures['serving_default']
 
 
-bbox_output = str('./data/video/Output/Object-detector-bbox_output.txt') # Path to BBox-Output
+bbox_output = str('./data/video/Output/Object-detector-' + video_name[:-4] + ".txt") # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
@@ -49,6 +55,8 @@ frame_num = 0
 while True:
     # Capture frame-by-frame
     return_value, frame = video.read()
+    if not return_value:
+        break
     main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
     frame_num +=1
@@ -58,7 +66,12 @@ while True:
     bboxes, classes = [], []
     for y1 in range(0, main_frame.shape[0], stepSize):
         for x1 in range(0, main_frame.shape[1], stepSize):
-                            
+
+            if False == applySlidingWindow:    
+                 bboxes, classes = myutils.runYoloV4(patch, infer, cfg, thresh_iou, thresh_score, 0, 0)
+                 break
+
+
             y2 = y1 + windowSize
             x2 = x1 + windowSize
 
@@ -72,7 +85,7 @@ while True:
                 continue
 
 
-            bboxes_patch, classes_patch = myutils.runYoloV4(patch, infer, cfg, thresh_iou, thresh_score, x1, y1,)
+            bboxes_patch, classes_patch = myutils.runYoloV4(patch, infer, cfg, thresh_iou, thresh_score, x1, y1)
             if 0 == len(bboxes):
                 bboxes = bboxes_patch
                 classes = classes_patch
