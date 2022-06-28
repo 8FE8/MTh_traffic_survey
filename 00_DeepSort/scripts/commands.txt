@@ -1,0 +1,1 @@
+python3 convert-tracking-to-MOT.py -v ../Nadir-90m-6-001.MOV -t ../Object-tracking-Nadir-90m-6-001-fasterRCNN.txt -f Tracking-Nadir-6
