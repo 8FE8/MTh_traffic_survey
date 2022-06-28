@@ -153,8 +153,7 @@ while True:
                                                                                     str(track.track_id),
                                                                                     class_name, 
                                                                                     int(bbox[0]),int(bbox[1]), 
-                                                                                    int(bbox[0])+int(bbox[2]),
-                                                                                    int(bbox[1]) + int(bbox[3])))
+                                                                                    int(bbox[2]),int(bbox[3])))
 
     
     # calculate frames per second of running detections
