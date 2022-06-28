@@ -62,23 +62,22 @@ def runYoloV4(frame, infer, cfg, thresh_iou, thresh_score, x_offset, y_offset, y
             deleted_indx.append(i)
         else:
             names.append(class_name)
-    names = np.array(names)
-    count = len(names)
+    # names = np.array(names)
+    # count = len(names)
                 
     # delete detections that are not in allowed_classes
     bboxes = np.delete(bboxes, deleted_indx, axis=0) # [175. 619. 123.  77.] --> xmin, ymin, width, height
     scores = np.delete(scores, deleted_indx, axis=0) # [0.98072225 0.7607064]
-    
+
     bboxes.tolist()
     boxesFinal = []
     for box in bboxes:
         box[0] = box[0] + x_offset
         box[1] = box[1] + y_offset
-        boxesFinal.append(box)
-
+        boxesFinal.append([int(box[0]), int(box[1]), int(box[2]), int(box[3])])
 
     #print("BBoxes : " + str(bboxes))
-    return boxesFinal, scores.tolist()
+    return boxesFinal, names
 
 
 def read_detection(detection_file):
