@@ -59,7 +59,7 @@ cv2.resizeWindow("frame", 1280,720)
 if not os.path.exists(folder_tracking):
     os.mkdir(folder_tracking)
 
-frameId = 1
+frameId = 0
 while(True):
     
     # Capture the video frame
