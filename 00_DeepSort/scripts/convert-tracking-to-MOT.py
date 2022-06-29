@@ -20,7 +20,11 @@ def read_tracker_results(detection_file):
             idx_end = line.find(" Class:")
             tracker_id  = int(line[idx_start:idx_end])
             idx = line.find("Class:")+7
-            label = line[idx:idx+3]
+            idx_end = line[idx:].find(",") + idx
+            label = line[idx:idx_end]
+            print(label)
+            if 'person' != label and 'pedestrian' != label:
+                continue
             idx = line.find("Coor:")+6
             x1,y1,x2,y2 = line[idx:].split(',')
             x1,y1,x2,y2 = int(x1), int(y1), int(x2), int(y2)

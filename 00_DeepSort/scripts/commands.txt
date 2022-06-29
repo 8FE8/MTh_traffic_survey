@@ -3,4 +3,4 @@ python convert-tracking-to-MOT.py -v ../../../Nadir-90m-6-001.MOV -t ../data/vid
 python convert-detections-to-PascalVOC.py -v ../../../Nadir-90m-6-001.MOV -t ../data/video/Output/Object-detector-Nadir-90m-6-001-fasterRCNN.txt -f PascalVOC-Nadir-6
 
 
-python convert-tracking-to-MOT.py -v ../../../PETS09-S2L1-raw.webm -t ../data/video/Output/Object-detector-PETS09-S2L1-raw.txt -f PETS09
+python convert-tracking-to-MOT.py -v ../../../PETS09-S2L1-raw.webm -t ../data/video/Output/Object-tracking-PETS09-S2L1-raw.txt -f PETS09
