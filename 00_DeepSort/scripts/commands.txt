@@ -15,10 +15,17 @@ python -m motmetrics.apps.eval_motchallenge PETS09-GT PETS09-fasterRCNN
 python -m motmetrics.apps.eval_motchallenge PETS09-GT PETS09-YOLO
 
 
+*************************************  PETS09-S2L1-raw.webm  **********************************************
         IDF1    IDP    IDR    Rcll   Prcn  GT   MT  PT  ML  FP  FN  IDs  FM  MOTA   MOTP   IDt IDa IDm
 (YOLO)
 OVERALL  79.5%  80.4%  78.6%  78.6%  80.4% 4641 3648  0 993 892 993   0   0   59.4%   nan   0   0   0
 
 (fRCNN)
 OVERALL  81.9%  81.6%  82.3%  82.3%  81.6% 4641 3820  0 821 864 821   0   0   63.7%   nan   0   0   0
+
+(MOG2)
+OVERALL  42.1%  46.6%  38.4%  38.4%  46.6% 4626 1775  0 2851 2036 2851 0  0   -5.6%   nan   0   0   0
+
+(MCD)
+OVERALL  34.0%  40.6%  29.3%  29.3%  40.6% 4635 1356  0 3279 1984 3279 0  0  -13.5%   nan   0   0   0
 

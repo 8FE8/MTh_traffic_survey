@@ -105,3 +105,47 @@ def read_detection(detection_file):
             # print(frame_id, " ", x1,y1,x2,y2)
             # break
     return bboxes, labels
+
+
+
+
+def checkBorders(startX, startY, endX, endY, width, height):
+        if (startX < 0):
+            startX = 0
+        
+        if (startY < 0): 
+            startY = 0
+        
+        if (endX >= width):
+            endX = width - 1
+        
+        if (endY >= height):
+            endY = height - 1
+
+        return startX, startY, endX, endY
+
+def enlarge(startX, startY, endX, endY, offset = 5):
+    return startX-offset, startY-offset, endX+offset*2, endY+offset*2
+
+
+def maskToBoxes(mask):
+    height, width = mask.shape
+    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    motion = np.zeros(mask.shape, np.uint8)
+    for cnt in contours:
+        if cv2.contourArea(cnt) < 40:
+            continue
+
+        (x, y, w, h) = cv2.boundingRect(cnt)
+        x,y,w,h = enlarge(x,y,w,h)
+        x,y,w,h = checkBorders(x,y,w,h,width, height)
+        motion[y:y+h, x:x+w] = 255
+    
+    contours, _ = cv2.findContours(motion, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    boxes = []
+    for cnt in contours:
+        boxes.append((x, y, x+w, y+h))
+    return boxes
+
+
+

@@ -22,9 +22,8 @@ def read_tracker_results(detection_file):
             idx = line.find("Class:")+7
             idx_end = line[idx:].find(",") + idx
             label = line[idx:idx_end]
-            print(label)
-            if 'person' != label and 'pedestrian' != label:
-                continue
+            # if 'person' != label and 'pedestrian' != label:
+            #     continue
             idx = line.find("Coor:")+6
             x1,y1,x2,y2 = line[idx:].split(',')
             x1,y1,x2,y2 = int(x1), int(y1), int(x2), int(y2)
@@ -70,7 +69,7 @@ while(True):
 
     frameFolder = "seq" + str(frameId).zfill(4)
     
-    
+
 
     if frameId in bboxes_dict:
         boxes = bboxes_dict[frameId]
