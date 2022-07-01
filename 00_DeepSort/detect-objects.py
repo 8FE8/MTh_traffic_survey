@@ -68,7 +68,7 @@ while True:
         for x1 in range(0, main_frame.shape[1], stepSize):
 
             if False == applySlidingWindow:    
-                 bboxes, classes = myutils.runYoloV4(patch, infer, cfg, thresh_iou, thresh_score, 0, 0)
+                 bboxes, classes = myutils.runYoloV4(frame, infer, cfg, thresh_iou, thresh_score, 0, 0)
                  break
 
 
@@ -121,6 +121,10 @@ while True:
     for i,box in enumerate(bboxes):
         # print(box)
         x,y,w,h = box[0], box[1], box[2], box[3]
+
+        if w > 400 or h > 400:
+            continue
+        
         cv2.rectangle(main_frame, (x,y), (x+w, y+h), color, 2)
         bbbox_output_file.write("Frame: "+ str(frame_num)+", Class: {}, Coor: {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
 

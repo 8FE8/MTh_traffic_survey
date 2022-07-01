@@ -53,7 +53,7 @@ while True:
         for x1 in range(0, main_frame.shape[1], stepSize):
                             
             if False == applySlidingWindow:    
-                bboxes, classes = object_detector.detect(patch, 0, 0)
+                bboxes, classes = object_detector.detect(frame, 0, 0)
                 break
 
             
