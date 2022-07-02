@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import time
 
+from yoloV5_wrapper import YOLOWrapper
 from fasterRCNN_wrapper import FasterRCNNWrapper
 from deep_sort import preprocessing
 
@@ -17,7 +18,8 @@ video_name = "Nadir-90m-6-001.MOV"
 
 
 video = cv2.VideoCapture(video_path + video_name)
-object_detector = FasterRCNNWrapper()
+# object_detector = FasterRCNNWrapper()
+object_detector = YOLOWrapper()
 
 
 # get dimension of video input
@@ -31,7 +33,7 @@ bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
 
-windowSize, stepSize = 1500, 1200
+windowSize, stepSize = 960, 800
 frame_num = 0
 while True:
     # Capture frame-by-frame
