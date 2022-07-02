@@ -21,9 +21,8 @@ import myutils
 applySlidingWindow = True
 
 
-video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
-video_name = "Nadir-90m-6-001.MOV"
-# video_name = "PETS09-S2L1-raw.webm"
+path = str('../../frames-Nadir-90m-6/') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
+txtname = "Nadir-6-YOLO"
 
 thresh_iou = float(0.45) # IOU-Threshold, e.g. 0.45
 thresh_score = float(0.50) # Score-Threshold, e.g. 0.50
@@ -31,36 +30,29 @@ thresh_score = float(0.50) # Score-Threshold, e.g. 0.50
 weights_yolo = './checkpoints/yolov4-416'
 yolo_width, yolo_height = 416, 416
 
-video = cv2.VideoCapture(video_path + video_name)
-
-# get dimension of video input
-width_input  = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))   # width`
-height_input = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)) 
-
-
 
 # Load Object-Detetion Model
 saved_model_loaded = tf.saved_model.load(weights_yolo, tags=[tag_constants.SERVING])
 infer = saved_model_loaded.signatures['serving_default']
 
 
-bbox_output = str('./data/video/Output/Object-detector-' + video_name[:-4] + ".txt") # Path to BBox-Output
+bbox_output = str('./data/video/Output/Object-detector-' + txtname + '.txt') # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
 
 windowSize, stepSize = 1000, 800
-frame_num = 0
-while True:
+
+for frameId in range(1,177):
+
     # Capture frame-by-frame
-    return_value, frame = video.read()
-    if not return_value:
-        break
+    filename = "frame" + str(frameId) + ".jpg"
+    frame = cv2.imread(path + filename)
+    main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
-    frame_num +=1
-    print('Frame #: ', frame_num)
+    print('Frame #: ', frameId)
     start_time = time.time()
 
     bboxes, classes = [], []
@@ -126,7 +118,7 @@ while True:
             continue
         
         cv2.rectangle(main_frame, (x,y), (x+w, y+h), color, 2)
-        bbbox_output_file.write("Frame: "+ str(frame_num)+", Class: {}, Coor: {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
+        bbbox_output_file.write("Frame: "+ str(frameId)+", Class: {}, Coor: {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
 
     
     # calculate frames per second of running detections

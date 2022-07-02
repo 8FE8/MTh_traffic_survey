@@ -14,7 +14,8 @@ def read_detection(detection_file):
             idx = line.find(",")
             frame_id = int(line[7:idx])
             idx = line.find("Class:")+7
-            label = line[idx:idx+3]
+            idx_end = line[idx:].find(",") + idx
+            label = line[idx:idx_end]
             idx = line.find("Coor:")+6
             x1,y1,x2,y2 = line[idx:].split(',')
             x1,y1,x2,y2 = int(x1), int(y1), int(x2), int(y2)

@@ -53,12 +53,10 @@ from _collections import deque
 pts = [deque(maxlen=3000) for _ in range(50000)]
 
 
+path = str('../../frames-Nadir-90m-6/')
+txtname = "Nadir-6-YOLO"
 
-video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
-video_name = "Nadir-90m-6-001.MOV"
-video_name = "PETS09-S2L1-raw.webm"
-
-detection_txt_file = './data/video/Output/Object-detector-' + video_name[:-4] + ".txt"
+detection_txt_file = './data/video/Output/Object-detector-' + txtname +'.txt'
 bboxes_dict, labels_dict = myutils.read_detection(detection_txt_file)
 
 # Set Parameters for Tracking
@@ -66,8 +64,6 @@ bboxes_dict, labels_dict = myutils.read_detection(detection_txt_file)
 max_cosine_distance = 0.9 # e.g. 0.4
 nn_budget = None #e.g. None
 nms_max_overlap = 1.0 # e.g. 1.0
-
-video = cv2.VideoCapture(video_path + video_name)
 
 
 
@@ -80,33 +76,30 @@ metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance
 tracker = Tracker(metric)
 
 
-bbox_output = str('./data/video/Output/Object-tracking-' + video_name[:-4] + ".txt") # Path to BBox-Output
+bbox_output = str('./data/video/Output/Object-tracking-' + txtname + ".txt") # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
 
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
 
-frame_num = 0
-while True:
-    # Capture frame-by-frame
-    return_value, frame = video.read()
-    if not return_value:
-        break
+for frameId in range(1,177):
 
+    # Capture frame-by-frame
+    filename = "frame" + str(frameId) + ".jpg"
+    frame = cv2.imread(path + filename)
     main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
     
-    frame_num +=1
-    print('Frame #: ', frame_num)
+    print('Frame #: ', frameId)
     start_time = time.time()
 
     
     #print("BBoxes : " + str(bboxes))
-    bboxes, labels = bboxes_dict[frame_num], labels_dict[frame_num]
+    bboxes, labels = bboxes_dict[frameId], labels_dict[frameId]
 
-    # for box in bboxes:
-    #     cv2.rectangle(main_frame, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), (255,0,0), 2)
+    for box in bboxes:
+        cv2.rectangle(main_frame, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), (255,0,0), 2)
     
     
 
@@ -149,7 +142,7 @@ while True:
             #thickness = int(np.sqrt(64/float(j+1))*2)
             cv2.line(main_frame, (pts[track.track_id][j-1]), (pts[track.track_id][j]), color, thickness)
     
-        bbbox_output_file.write("Frame: "+ str(frame_num)+", ID: {} Class: {}, Coor: {},{},{},{}\n".format(
+        bbbox_output_file.write("Frame: "+ str(frameId)+", ID: {} Class: {}, Coor: {},{},{},{}\n".format(
                                                                                     str(track.track_id),
                                                                                     class_name, 
                                                                                     int(bbox[0]),int(bbox[1]), 

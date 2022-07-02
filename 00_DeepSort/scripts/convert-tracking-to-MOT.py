@@ -50,7 +50,8 @@ folder_tracking = args['folder']
 bboxes_dict, labels_dict = read_tracker_results(args['text'])
 
 
-cap = cv2.VideoCapture(args['video'])
+path = args['video']
+# cap = cv2.VideoCapture(args['video'])
 
 cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("frame", 1280,720)
@@ -58,17 +59,13 @@ cv2.resizeWindow("frame", 1280,720)
 if not os.path.exists(folder_tracking):
     os.mkdir(folder_tracking)
 
-frameId = 0
-while(True):
-    
-    # Capture the video frame
-    # by frame
-    ret, frame = cap.read()
-    if not ret:
-        break
+for frameId in range(1,177):
+
+    # Capture frame-by-frame
+    filename = "frame" + str(frameId) + ".jpg"
+    frame = cv2.imread(path + filename)
 
     frameFolder = "seq" + str(frameId).zfill(4)
-    
 
 
     if frameId in bboxes_dict:
@@ -89,5 +86,4 @@ while(True):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
   
-cap.release()
 cv2.destroyAllWindows()

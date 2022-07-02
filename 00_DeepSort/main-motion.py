@@ -32,9 +32,10 @@ pts = [deque(maxlen=3000) for _ in range(50000)]
 
 
 
-video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
-video_name = "Nadir-90m-6-001.MOV"
-video_name = "PETS09-S2L1-raw.webm"
+path = str('../../frames-Nadir-90m-6/')
+
+applyMCD = True
+txtname = "Nadir-6-MCD"
 
 # Set Parameters for Tracking
 # Definition of the parameters
@@ -42,10 +43,6 @@ max_cosine_distance = 0.9 # e.g. 0.4
 nn_budget = None #e.g. None
 nms_max_overlap = 1.0 # e.g. 1.0
 
-video = cv2.VideoCapture(video_path + video_name)
-
-
-applyMCD = False
 
 backSub = cv2.createBackgroundSubtractorMOG2()
 mcd = MCDWrapper.MCDWrapper()
@@ -70,7 +67,7 @@ metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance
 tracker = Tracker(metric)
 
 
-bbox_output = str('./data/video/Output/Motion-tracking-' + video_name[:-4] + ".txt") # Path to BBox-Output
+bbox_output = str('./data/video/Output/Motion-tracking-' + txtname + ".txt") # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
 
@@ -78,18 +75,16 @@ cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
 
 isFirst = True
-frame_num = 0
-while True:
+for frameId in range(1,177):
+
     # Capture frame-by-frame
-    return_value, frame = video.read()
-    if not return_value:
-        break
+    filename = "frame" + str(frameId) + ".jpg"
+    frame = cv2.imread(path + filename)
 
     main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
     
-    frame_num +=1
-    print('Frame #: ', frame_num)
+    print('Frame #: ', frameId)
     start_time = time.time()
 
     
@@ -174,7 +169,7 @@ while True:
             #thickness = int(np.sqrt(64/float(j+1))*2)
             cv2.line(main_frame, (pts[track.track_id][j-1]), (pts[track.track_id][j]), color, thickness)
     
-        bbbox_output_file.write("Frame: "+ str(frame_num)+", ID: {} Class: {}, Coor: {},{},{},{}\n".format(
+        bbbox_output_file.write("Frame: "+ str(frameId)+", ID: {} Class: {}, Coor: {},{},{},{}\n".format(
                                                                                     str(track.track_id),
                                                                                     class_name, 
                                                                                     int(bbox[0]),int(bbox[1]), 
