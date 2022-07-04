@@ -3,7 +3,7 @@ import cv2
 import os
 import math
 import numpy as np
-import argparse
+import matplotlib.pyplot as plt
 
 def getNumbers(just):
     x = ''.join(filter(str.isdigit, str(just)))
@@ -43,7 +43,7 @@ def read_tracker_results(detection_file):
 
 
 
-txtname = "Object-tracking-Nadir-6-YOLO"
+txtname = "Object-tracking-Nadir-6-fasterRCNN"
 # txtname = "Motion-tracking-Nadir-6-MOG2"
 folder_tracking = "Nadir-6-GT"
 
@@ -63,6 +63,18 @@ if not os.path.exists(folder_tracking):
     os.mkdir(folder_tracking)
 
 
+output_video_width, output_video_height = 1920, 1080
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+output_video = cv2.VideoWriter("trajectory-output.avi",fourcc, 30, (output_video_width, output_video_height ))
+
+
+count_color = 100
+COLORS = []
+for i in range(count_color):
+    COLORS.append(list(np.random.random(size=3) * 256))
+
+tracker, tracker_GT = {}, {}
+
 totalGT, totalFound = 0, 0
 center_distances = []
 for frameId in range(1,177):
@@ -81,11 +93,34 @@ for frameId in range(1,177):
 
         totalFound = totalFound + len(boxes)
 
+        for idx,x,y,w,h in boxes_gt:
+            xg, yg = x+w//2, y+h//2
+            if idx in tracker_GT:
+                tracker_GT[idx].append([xg, yg])
+            else:
+                tracker_GT[idx]=[[xg, yg]]
+            
+            for key in tracker_GT:
+                for a,b in tracker_GT[key]:
+                    cv2.circle(frame, (a,b), 3, (0,0,255), 3)
+
+        
         for idx,x,y,w,h in boxes:
             cv2.rectangle(frame, (x,y), (x+w,y+h), (0,0,255), thickness=2, lineType=cv2.LINE_AA)
             cv2.putText(frame, str(idx), (x,y-5), 0, 2, (0,0,255),2 )
 
             xd, yd = x+w//2, y+h//2
+
+            if idx in tracker:
+                tracker[idx].append([xd,yd])
+            else:
+                tracker[idx]=[[xd,yd]]
+            
+            for key in tracker:
+                color = COLORS[key%count_color] 
+                for a,b in tracker[key]:
+                    cv2.circle(frame, (a,b), 3, color, 4)
+
             distance = 125
             for idx,x,y,w,h in boxes_gt:
                 xg, yg = x+w//2, y+h//2
@@ -99,10 +134,14 @@ for frameId in range(1,177):
 
     # Display the resulting frame
     cv2.imshow('frame', frame)
+    frame = cv2.resize(frame, (output_video_width, output_video_width))
+    output_video.write(frame)
+
     frameId = frameId + 1
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-  
+
+output_video.release() 
 cv2.destroyAllWindows()
 
 print("total GT: %d  Found: %d  center_distances count %d mean: %.2f" %(totalGT, totalFound,len(center_distances), np.mean(center_distances)))
