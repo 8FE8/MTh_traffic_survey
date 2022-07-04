@@ -70,6 +70,9 @@ tracker = Tracker(metric)
 bbox_output = str('./data/video/Output/Motion-tracking-' + txtname + ".txt") # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
+output_video_width, output_video_width = 1920, 1080
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+output_video = cv2.VideoWriter('./data/video/Output/' + txtname + ".avi",fourcc, 30, (output_video_width, output_video_width )) # Output for only one subframe
 
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
@@ -183,10 +186,12 @@ for frameId in range(1,177):
     main_frame = cv2.cvtColor(main_frame, cv2.COLOR_RGB2BGR) 
     cv2.imshow("Main_Frame", main_frame)
     
-    
+    main_frame = cv2.resize(main_frame, (output_video_width, output_video_width))
+    output_video.write(main_frame)
+
     if cv2.waitKey(1) & 0xFF == ord('q'): 
         break
         
-
+output_video.release()
 cv2.destroyAllWindows()
 bbbox_output_file.close() # Close BBox-Text-File
