@@ -144,14 +144,16 @@ for frameId in range(1,177):
             thickness = 2
             #thickness = int(np.sqrt(64/float(j+1))*2)
             cv2.line(main_frame, (pts[track.track_id][j-1]), (pts[track.track_id][j]), color, thickness)
-    
+
         bbbox_output_file.write("Frame: "+ str(frameId)+", ID: {} Class: {}, Coor: {},{},{},{}\n".format(
                                                                                     str(track.track_id),
                                                                                     class_name, 
                                                                                     int(bbox[0]),int(bbox[1]), 
                                                                                     int(bbox[2]),int(bbox[3])))
 
-    
+        bbox_text_position = (int(bbox[0]),int(bbox[1]-10))
+        cv2.putText(main_frame, str(track.track_id), bbox_text_position,0, 2, (255,0,0),2)
+
     # calculate frames per second of running detections
     fps = 1 / (time.time() - start_time) #1.0
     print("FPS: %.2f" % fps)

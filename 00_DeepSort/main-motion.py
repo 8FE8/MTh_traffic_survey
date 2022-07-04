@@ -177,7 +177,9 @@ for frameId in range(1,177):
                                                                                     class_name, 
                                                                                     int(bbox[0]),int(bbox[1]), 
                                                                                     int(bbox[2]),int(bbox[3])))
-
+        
+        bbox_text_position = (int(bbox[0]),int(bbox[1]-10))
+        cv2.putText(main_frame, str(track.track_id), bbox_text_position,0, 2, (255,0,0),2)
     
     # calculate frames per second of running detections
     fps = 1 / (time.time() - start_time) #1.0
