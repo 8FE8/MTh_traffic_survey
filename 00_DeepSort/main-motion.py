@@ -70,9 +70,9 @@ tracker = Tracker(metric)
 bbox_output = str('./data/video/Output/Motion-tracking-' + txtname + ".txt") # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
-output_video_width, output_video_width = 1920, 1080
+output_video_width, output_video_height = 1920, 1080
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-output_video = cv2.VideoWriter('./data/video/Output/' + txtname + ".avi",fourcc, 30, (output_video_width, output_video_width )) # Output for only one subframe
+output_video = cv2.VideoWriter('./data/video/Output/' + txtname + ".avi",fourcc, 30, (output_video_width, output_video_height )) # Output for only one subframe
 
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
