@@ -17,7 +17,7 @@ class YOLOWrapper():
         self.conf_thres = 0.5 
         self.iou_thres = 0.5
         self.augment = False
-        self.weights = "../../train-model/best.pt"
+        self.weights = "../../train-model/yolov5/runs/train/exp/weights/best.pt"
         self.imgszWidth, self.imgszHeight = 640, 480 #FLAGS.width
         # Initialize
         self.deviceId = '0'
