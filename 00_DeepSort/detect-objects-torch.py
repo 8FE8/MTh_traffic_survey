@@ -6,7 +6,7 @@ import numpy as np
 import time
 
 from yoloV5_wrapper import YOLOWrapper
-from fasterRCNN_wrapper import FasterRCNNWrapper
+# from fasterRCNN_wrapper import FasterRCNNWrapper
 from deep_sort import preprocessing
 
 
@@ -15,6 +15,7 @@ applySlidingWindow = True
 flagProcessVideo = False
 txtname = "Nadir-6-YOLO"
 txtname = "Nadir-6-fasterRCNN"
+txtname = "Nadir-6-YOLOV5"
 
 
 if flagProcessVideo:
@@ -26,8 +27,8 @@ else:
     path = str('../../frames-Nadir-90m-6/')
 
 # video = cv2.VideoCapture(video_path + video_name)
-object_detector = FasterRCNNWrapper()
-# object_detector = YOLOWrapper()
+# object_detector = FasterRCNNWrapper()
+object_detector = YOLOWrapper()
 
 
 
@@ -113,7 +114,7 @@ while True:
     color = (255,0,0)
     for i, (x,y,w,h) in enumerate(bboxes):
         cv2.rectangle(main_frame, (x, y), (x+w, y+h), color, 2)
-        bbbox_output_file.write("Frame: "+ str(frame_id)+", Class: {}, Coor: {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
+        bbbox_output_file.write("Frame: "+ str(frameId)+", Class: {}, Coor: {},{},{},{}\n".format(classes[i], x,y,x+w,y+h))
 
 
     
