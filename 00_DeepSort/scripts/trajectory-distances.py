@@ -38,6 +38,7 @@ def read_tracker_results(detection_file):
 
 
 txtname = "Object-tracking-Nadir-6-fasterRCNN"
+txtname = "Object-tracking-Nadir-6-YOLOV5"
 # txtname = "Motion-tracking-Nadir-6-MOG2"
 folder_tracking = "Nadir-6-GT"
 
@@ -52,9 +53,6 @@ path = str('../../../frames-Nadir-90m-6/')
 
 cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("frame", 1280,720)
-
-if not os.path.exists(folder_tracking):
-    os.mkdir(folder_tracking)
 
 
 output_video_width, output_video_height = 1920, 1080
