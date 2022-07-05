@@ -208,7 +208,7 @@ while True:
     main_frame = cv2.cvtColor(main_frame, cv2.COLOR_RGB2BGR) 
     cv2.imshow("Main_Frame", main_frame)
     
-    main_frame = cv2.resize(main_frame, (output_video_width, output_video_width))
+    main_frame = cv2.resize(main_frame, (output_video_width, output_video_height))
     output_video.write(main_frame)
 
     frameId = frameId + 1

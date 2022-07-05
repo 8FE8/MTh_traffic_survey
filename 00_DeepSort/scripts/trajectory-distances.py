@@ -1,14 +1,8 @@
-from turtle import distance
 import cv2
 import os
 import math
 import numpy as np
-import matplotlib.pyplot as plt
-
-def getNumbers(just):
-    x = ''.join(filter(str.isdigit, str(just)))
-    return int(x)
-
+import glob
 
 def read_tracker_results(detection_file):
 
@@ -64,7 +58,8 @@ if not os.path.exists(folder_tracking):
 
 
 output_video_width, output_video_height = 1920, 1080
-fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+# fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
 output_video = cv2.VideoWriter("trajectory-output.avi",fourcc, 30, (output_video_width, output_video_height ))
 
 
@@ -77,7 +72,9 @@ tracker, tracker_GT = {}, {}
 
 totalGT, totalFound = 0, 0
 center_distances = []
-for frameId in range(1,177):
+
+imgCounter = len(glob.glob1(path,"*.jpg"))
+for frameId in range(1,imgCounter+1):
 
     # Capture frame-by-frame
     filename = "frame" + str(frameId) + ".jpg"
@@ -134,7 +131,7 @@ for frameId in range(1,177):
 
     # Display the resulting frame
     cv2.imshow('frame', frame)
-    frame = cv2.resize(frame, (output_video_width, output_video_width))
+    frame = cv2.resize(frame, (output_video_width, output_video_height))
     output_video.write(frame)
 
     frameId = frameId + 1
