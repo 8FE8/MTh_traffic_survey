@@ -12,6 +12,7 @@ from tensorflow.python.saved_model import tag_constants
 from core.config import cfg
 from PIL import Image
 import cv2
+import glob
 import numpy as np
 
 from deep_sort import preprocessing
@@ -19,10 +20,18 @@ import myutils
 
 
 applySlidingWindow = True
-
-
-path = str('../../frames-Nadir-90m-6/') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
+flagProcessVideo = False
 txtname = "Nadir-6-YOLO"
+
+
+if flagProcessVideo:
+    video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
+    video_name = "Nadir-90m-6-001.MOV"
+    # video_name = "PETS09-S2L1-raw.webm"
+    video = cv2.VideoCapture(video_path + video_name)
+else:
+    path = str('../../frames-Nadir-90m-6/')
+
 
 thresh_iou = float(0.45) # IOU-Threshold, e.g. 0.45
 thresh_score = float(0.50) # Score-Threshold, e.g. 0.50
@@ -44,12 +53,23 @@ cv2.resizeWindow("Main_Frame", 1280,720)
 
 windowSize, stepSize = 1000, 800
 
-for frameId in range(1,177):
+imgCounter = 0
+if not flagProcessVideo:
+    imgCounter = len(glob.glob1(path,"*.jpg"))
 
-    # Capture frame-by-frame
-    filename = "frame" + str(frameId) + ".jpg"
-    frame = cv2.imread(path + filename)
-    main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+frameId = 1
+while True:
+
+    if flagProcessVideo:
+        return_value, frame = video.read()
+        if not return_value:
+            break
+    else:
+        if frameId>imgCounter:
+            break
+        filename = "frame" + str(frameId) + ".jpg"
+        frame = cv2.imread(path + filename)
+
     main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
     print('Frame #: ', frameId)
@@ -130,7 +150,7 @@ for frameId in range(1,177):
     main_frame = cv2.cvtColor(main_frame, cv2.COLOR_RGB2BGR)
     cv2.imshow("Main_Frame", main_frame)
     
-    
+    frameId = frameId + 1
     if cv2.waitKey(1) & 0xFF == ord('q'): 
         running = False
         break

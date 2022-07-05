@@ -15,6 +15,7 @@ from core.config import cfg
 from PIL import Image
 import cv2
 import numpy as np
+import glob
 import matplotlib.pyplot as plt
 
 # deep sort imports
@@ -53,8 +54,16 @@ from _collections import deque
 pts = [deque(maxlen=3000) for _ in range(50000)]
 
 
-path = str('../../frames-Nadir-90m-6/')
+flagProcessVideo = False
 txtname = "Nadir-6-YOLO"
+
+if flagProcessVideo:
+    video_path = str('../../') # Path to Input-Video, '0' for Webcam, #Dimension 3840 x 2160
+    video_name = "Nadir-90m-6-001.MOV"
+    # video_name = "PETS09-S2L1-raw.webm"
+    video = cv2.VideoCapture(video_path + video_name)
+else:
+    path = str('../../frames-Nadir-90m-6/')
 
 detection_txt_file = './data/video/Output/Object-detector-' + txtname +'.txt'
 bboxes_dict, labels_dict = myutils.read_detection(detection_txt_file)
@@ -79,17 +88,31 @@ tracker = Tracker(metric)
 bbox_output = str('./data/video/Output/Object-tracking-' + txtname + ".txt") # Path to BBox-Output
 bbbox_output_file = open(bbox_output, "w") # Open File to store BBox-Coordinates
 
+output_video_width, output_video_height = 1920, 1080
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+output_video = cv2.VideoWriter('./data/video/Output/' + txtname + ".avi",fourcc, 30, (output_video_width, output_video_height )) # Output for only one subframe
 
 cv2.namedWindow("Main_Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Main_Frame", 1280,720)
 
-for frameId in range(1,177):
+imgCounter = 0
+if not flagProcessVideo:
+    imgCounter = len(glob.glob1(path,"*.jpg"))
 
-    # Capture frame-by-frame
-    filename = "frame" + str(frameId) + ".jpg"
-    frame = cv2.imread(path + filename)
-    main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+frameId = 1
+while True:
+
+    if flagProcessVideo:
+        return_value, frame = video.read()
+        if not return_value:
+            break
+    else:
+        if frameId>imgCounter:
+            break
+        filename = "frame" + str(frameId) + ".jpg"
+        frame = cv2.imread(path + filename)
     
+    main_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
     print('Frame #: ', frameId)
     start_time = time.time()
@@ -141,14 +164,16 @@ for frameId in range(1,177):
             thickness = 2
             #thickness = int(np.sqrt(64/float(j+1))*2)
             cv2.line(main_frame, (pts[track.track_id][j-1]), (pts[track.track_id][j]), color, thickness)
-    
+
         bbbox_output_file.write("Frame: "+ str(frameId)+", ID: {} Class: {}, Coor: {},{},{},{}\n".format(
                                                                                     str(track.track_id),
                                                                                     class_name, 
                                                                                     int(bbox[0]),int(bbox[1]), 
                                                                                     int(bbox[2]),int(bbox[3])))
 
-    
+        bbox_text_position = (int(bbox[0]),int(bbox[1]-10))
+        cv2.putText(main_frame, str(track.track_id), bbox_text_position,0, 2, (255,0,0),2)
+
     # calculate frames per second of running detections
     fps = 1 / (time.time() - start_time) #1.0
     print("FPS: %.2f" % fps)
@@ -156,10 +181,13 @@ for frameId in range(1,177):
     main_frame = cv2.cvtColor(main_frame, cv2.COLOR_RGB2BGR) 
     cv2.imshow("Main_Frame", main_frame)
     
-    
+    main_frame = cv2.resize(main_frame, (output_video_width, output_video_height))
+    output_video.write(main_frame)
+
+    frameId = frameId + 1
     if cv2.waitKey(1) & 0xFF == ord('q'): 
         break
         
-
+output_video.release()
 cv2.destroyAllWindows()
 bbbox_output_file.close() # Close BBox-Text-File
